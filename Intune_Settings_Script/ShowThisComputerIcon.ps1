@@ -18,18 +18,18 @@
     Skript nemá vstupné parametre. Všetko prebieha automaticky.
 
 .NOTES
-    Autor:        [Tvoje meno alebo nick]
-    Licencia:     MIT (alebo inú podľa GitHub repozitára)
+    Autor:        skolskyIT.guru (Leny)
+    Licencia:     MIT
     Verzia:       1.0
     Kompatibilita: Windows 10, Windows 11
     Testované:    PowerShell 5.1 a PowerShell 7.x
 
 .EXAMPLE
     Spustenie priamo na počítači:
-        powershell.exe -ExecutionPolicy Bypass -File .\Show-ThisPC.ps1
+        powershell.exe -ExecutionPolicy Bypass -File .\ShowThisComputerIcon.ps1
 
     Nasadenie cez Intune / GPO logon script:
-        - pridaj skript ako Win32App alebo logon script
+        - pridaj skript ako Win32App alebo powershell skript
         - použije sa pre všetkých používateľov
 
 .LINK
