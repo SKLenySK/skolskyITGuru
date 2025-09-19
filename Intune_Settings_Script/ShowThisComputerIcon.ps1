@@ -26,4 +26,25 @@ public class RefreshDesktop {
 [RefreshDesktop]::SHChangeNotify(0x8000000, 0, [IntPtr]::Zero, [IntPtr]::Zero)
 
 Write-Host "Hotovo – ikona Tento počítač je teraz na ploche." -ForegroundColor Green
+
+# Pre nových používateľov
+$regPathDefault = "HKU:\.DEFAULT\Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"
+New-Item -Path $regPathDefault -Force | Out-Null
+Set-ItemProperty -Path $regPathDefault -Name $clsid_ThisPC -Value 0 -Type DWord
+
+# Pre všetkých existujúcich používateľov
+$subKey = "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel"
+
+Get-ChildItem "Registry::HKEY_USERS" | ForEach-Object {
+    try {
+        $regPath = "Registry::$($_.Name)\$subKey"
+        if (-not (Test-Path $regPath)) { New-Item -Path $regPath -Force | Out-Null }
+        Set-ItemProperty -Path $regPath -Name $clsid_ThisPC -Value 0 -Type DWord
+        Write-Host "Nastavené pre SID $($_.PSChildName)"
+    } catch {
+        Write-Warning "Nepodarilo sa nastaviť pre $($_.PSChildName): $_"
+    }
+}
+
+
 Stop-Transcript
