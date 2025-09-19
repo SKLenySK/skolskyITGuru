@@ -1,0 +1,39 @@
+===============================================================
+Remediation: Control Panel Unblock
+===============================================================
+
+Popis:
+Tento remediačný balíček odblokuje prístup k Ovládaciemu panelu
+a Nastaveniam systému Windows. 
+Problém vzniká, keď predchádzajúca Intune politika (Administrative 
+Templates → Prohibit access to Control Panel and PC settings) 
+zanechá hodnotu v registroch aj po jej vypnutí alebo nastavení na 
+"Not configured".
+
+---------------------------------------------------------------
+Ako funguje:
+1. Detection skript kontroluje, či v registri používateľa existuje:
+   HKCU\Software\Microsoft\Windows\CurrentVersion\Policies\Explorer
+   Hodnota: NoControlPanel = 1
+   Ak je táto hodnota prítomná, znamená to blokovaný Control Panel.
+
+2. Remediation skript v prípade potreby:
+   - odstráni hodnotu NoControlPanel, alebo
+   - nastaví jej hodnotu na 0
+   Tým sa obnoví prístup k Ovládaciemu panelu.
+
+---------------------------------------------------------------
+Poznámky:
+- Skript beží v kontexte prihláseného používateľa (HKCU).
+- Nezasahuje do iných registrov mimo kľúča "Explorer".
+- Na prejavenie zmien môže byť potrebné odhlásenie/prihlásenie 
+  alebo reštart počítača.
+- Ak iná politika znova nastaví hodnotu, bude blokovanie opäť aktívne.
+
+---------------------------------------------------------------
+Použitie:
+Nasadiť cez:
+Intune Admin Center → Devices → Remediations → Create Remediation
+- Detection script: Detect-ControlPanel.ps1
+- Remediation script: Remediate-ControlPanel.ps1
+---------------------------------------------------------------
